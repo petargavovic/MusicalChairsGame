@@ -35,19 +35,23 @@ public class NPCController : MonoBehaviour
         {
             if (startMoving)
             {
-                var step = 2.8f * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, NearestChair.transform.position, step);
+                if (NearestChair != null)
+                {
+                    var step = 2.8f * Time.deltaTime;
+                    transform.position = Vector3.MoveTowards(transform.position, NearestChair.transform.position, step);
                 if (!inChair)
                 {
-                    if (NearestChair.GetComponent<Stolica>().taken)
+                    if (NearestChair.GetComponent<Stolica>().nearestNPC != gameObject && !NearestChair.GetComponent<Stolica>().taken)
                     {
                         for (int i = 0; i < AllChairs.Length; i++)
                         {
-                            if (!AllChairs[i].GetComponent<Stolica>().taken)
+                            if (AllChairs[i].GetComponent<Stolica>().nearestNPC == null && !AllChairs[i].GetComponent<Stolica>().taken)
                             {
                                 NearestChair = AllChairs[i];
-                            }
+                                        NearestChair.GetComponent<Stolica>().nearestNPC = gameObject;
+                                }
                         }
+                    }
                     }
                 }
             }
@@ -80,6 +84,8 @@ public class NPCController : MonoBehaviour
                 nearestDistance = distance;
             }
         }
+        if(NearestChair.GetComponent<Stolica>().nearestNPC == null)
+            NearestChair.GetComponent<Stolica>().nearestNPC = gameObject;
         StartCoroutine("AnimStart");
     }
     IEnumerator AnimStart()

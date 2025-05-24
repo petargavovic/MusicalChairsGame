@@ -46,7 +46,6 @@ public class Spawner : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.Range(0f, 2f));
         npcs[i].transform.GetChild(0).GetComponentInChildren<Animator>().enabled = true;
-        print(npcs[i].transform.GetChild(0).GetChild(0).GetChild(0).gameObject.name);
         npcs[i].transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Animator>().enabled = true;
     }
 
@@ -63,5 +62,7 @@ public class Spawner : MonoBehaviour
             npc.transform.GetComponentInChildren<Animator>().SetTrigger("stop");
             npc.GetComponent<NPCController>().GoToChair();
         }
+        foreach (GameObject chair in npcs[0].GetComponent<NPCController>().AllChairs)
+            chair.GetComponent<BoxCollider>().isTrigger = true;
     }
 }

@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         jumpAnimator = GetComponentInChildren<Animator>();
         s = audioManager.gameObject.GetComponents<AudioSource>()[1];
-        audioManager.Play("running");
+//        audioManager.Play("running");
         npcs = GameObject.Find("NPCSpawner").GetComponent<NPC>();
     }
 
@@ -93,7 +93,6 @@ public class PlayerController : MonoBehaviour
                 }
                 if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
                 {
-                    print("speed " + speed + " left");
                     transform.position += Vector3.left * Time.deltaTime * speed;
                 }
                 if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
@@ -137,7 +136,9 @@ public class PlayerController : MonoBehaviour
             else
             {
                 s.enabled = false;
-                animator.Play("Player_Idle");
+                animator.SetFloat("Horizontal", 0);
+                animator.SetFloat("Vertical", 0);
+                animator.SetFloat("Speed", 0);
                 loseTimer -= Time.deltaTime;
                 if (loseTimer < 3)
                 {

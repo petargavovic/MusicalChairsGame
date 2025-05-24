@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Stolica : MonoBehaviour
 {
     public bool taken = false;
+    public GameObject nearestNPC;
     public GameObject nextLevel;
     private void OnTriggerEnter(Collider other)
     {
@@ -14,7 +15,6 @@ public class Stolica : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                print(other.name);
                 if (!taken)
                 {
                     if (GameObject.Find("SpawnerSettings").GetComponent<SpawnerSettings>().npcNumber == 1)
@@ -30,22 +30,24 @@ public class Stolica : MonoBehaviour
                     }
                     else
                     {
-
+                        
                         Instantiate(nextLevel, GameObject.Find("Canvas").transform);
                         GameObject.Find("NPCSpawner").GetComponent<NPC>().won = true;
                     }
+                    nearestNPC.GetComponent<NPCController>().NearestChair = null;
+                    nearestNPC = null;
                 }
-                taken = true;
             }
             else if(other.tag == "NPC")
             {
                 PlayerController playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-                taken = true;
+                GetComponent<BoxCollider>().isTrigger = false;
                 playerController.takenCount++;
                 other.GetComponent<NPCController>().inChair = true;
-                if (GameObject.Find("SpawnerSettings").GetComponent<SpawnerSettings>().npcNumber <= playerController.takenCount +1)
+                if (GameObject.Find("SpawnerSettings").GetComponent<SpawnerSettings>().npcNumber == playerController.takenCount)
                     playerController.timer = 0;
             }
+            taken = true;
         }
     }
     IEnumerator GoToMenu()
